@@ -94,7 +94,7 @@
 	    // Get values from textboxes
 	    $accountname=$_POST['accountname'];
 		$accounttype=$_POST['accounttype'];
-		$balance=100.35;
+		$balance=1000.00;
 
 	    //Check newly generated Code exist in DB table or not.
 	    $query = "SELECT * FROM accounts WHERE accountnumber='" . $randomString . "'";
@@ -135,8 +135,8 @@
 		$quantity = $_POST['quantity'];
 		$userid = $_SESSION['id'];
 
-		$sql = "INSERT INTO `transactions`(`fromaccount`, `toaccount`, `message`, `amount`, `date`, `belongstoid`) 
-			VALUES ('$accountfrom','$accountto','$message', '$quantity', '$date', '$userid')";
+		$sql = "INSERT INTO `transactions`(`fromaccount`, `toaccount`, `message`, `amount`, `date`, `belongstoid`,`type`) 
+			VALUES ('$accountfrom','$accountto','$message', '$quantity', '$date', '$userid', 'transfer')";
 
 		if (mysqli_query($conn, $sql)) {
 			echo json_encode(array("statusCode"=>200));
@@ -169,12 +169,8 @@
 		$quantity = $_POST['quantity'];
 		$userid = $_SESSION['id'];
 
-		$sql = "INSERT INTO `transactions`(`fromaccount`, `toaccount`, `message`, `amount`, `date`, `belongstoid`) 
-			VALUES ('$accountfrom','$accountnumber','$message', '$quantity', '$date', '$userid')";
-
-
-
-
+		$sql = "INSERT INTO `transactions`(`fromaccount`, `toaccount`, `message`, `amount`, `date`, `belongstoid`, `type`) 
+			VALUES ('$accountfrom','$accountnumber','$message', '$quantity', '$date', '$userid', 'send')";
 
 		$x=mysqli_query($conn, "SELECT * FROM accounts WHERE belongstoid='" . $_SESSION['id'] . "' AND accountname='$accountfrom'");
 		$fromsrc=mysqli_fetch_array($x);
@@ -194,6 +190,11 @@
 
 				mysqli_query($conn, "UPDATE accounts SET accountbalance = '$finalfromacc' WHERE belongstoid='" . $_SESSION['id'] . "' AND accountname='$accountfrom'");
 				mysqli_query($conn, "UPDATE accounts SET accountbalance = '$finaltoacc' WHERE accountnumber='$accountnumber'");
+
+				// Update transaction log of recipient
+/*				$srcid = $tosrc['id'];
+				mysqli_query($conn, "INSERT INTO `transactions`(`fromaccount`, `toaccount`, `message`, `amount`, `date`, `belongstoid`,`type`) 
+				VALUES ('$accountfrom','$accountto','$message', '$quantity', '$date', '$srcid', 'receive')");*/
 			} 
 			else {
 				echo json_encode(array("statusCode"=>201));

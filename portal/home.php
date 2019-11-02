@@ -173,7 +173,8 @@ if (!$r){
                                         while($row = mysqli_fetch_array($result)) {
                                             echo "<tr>";
                                             echo "<td>" . $row['accountname'] . " (" . $row['accounttype'] . ")" . "</td>";
-                                            echo "<td class='text-center'><a>" . format_accountnumber($row['accountnumber']) . "<br></a></td>";
+                                            /*echo "<td class='text-center'><a>" . format_accountnumber($row['accountnumber']) . "<br></a></td>";*/
+                                            echo "<td class='text-center'><a>" . $row['accountnumber'] . "<br></a></td>";
                                             echo "<td class='text-right'>$" . number_format($row['accountbalance'], 2) . "</td>";
                                             echo "<td class='text-right'><a href='transfer.php?t=1'>" . "Send Money" . "<br></a></td>";
                                             echo "<td class='text-right'><a href='transfer.php?t=2'>" . "Transfer" . "<br></a></td>";
@@ -241,20 +242,38 @@ if (!$r){
                             <div class="card-body">
                                 <div class="paymententry">
 
-
                                     <?php
 
-                                        $rs = mysqli_query($conn, "SELECT * FROM transactions WHERE belongstoid = '$id' ORDER BY id DESC");
+                                        $i = $userRow['id'];
+                                        $y=mysqli_query($conn, "SELECT * FROM accounts WHERE belongstoid='$i'");
+                                        $tosrc=mysqli_fetch_array($y);
+
+                                        // $rs = mysqli_query($conn, "SELECT * FROM transactions WHERE belongstoid = '$id' ORDER BY id DESC LIMIT 5");
+                                        $rs = mysqli_query($conn, "SELECT * FROM transactions WHERE belongstoid = '$id' OR toaccount='" . $tosrc['accountnumber'] . "' ORDER BY id DESC LIMIT 5");
 
                                         if (mysqli_num_rows($rs) == 0){
-                                            echo "<center>You don't have any registered accounts</center>";
+                                            echo "<center>There is nothing to find here..</center>";
                                         }
 
                                         while($row = mysqli_fetch_array($rs)) {
-                                            echo "<p class='loghover fixpadding' style='margin-bottom: 5px;font-size: 14px;align-items: center;'>
-                                                Transferred &nbsp;<label class='btnprice " . 
-                                                (($row['amount'] <= 0)? 'red':'green')
-                                                . " disable-selection'>$" . number_format($row['amount'], 2) . "</label> from " . $row['fromaccount'] . " to " . $row['toaccount'] . "</p>";
+                                            if ($row['type'] == "transfer"){
+                                                echo "<p class='loghover fixpadding' style='margin-bottom: 5px;font-size: 14px;align-items: center;'>
+                                                Transferred &nbsp;<label class='btnprice green disable-selection'>$" . number_format($row['amount'], 2) . "</label> from " . $row['fromaccount'] . " to " . $row['toaccount'] . "</p>";
+                                            }
+                                            
+                                            if ($row['type'] == "send"){
+                                                echo "<p class='loghover fixpadding' style='margin-bottom: 5px;font-size: 14px;align-items: center;'>
+                                                Sent &nbsp;<label class='btnprice red disable-selection'>$-" . number_format($row['amount'], 2) . "</label> from " . $row['fromaccount'] . " to " . $row['toaccount'] . "</p>";
+                                            }
+                                            
+                                            if ($row['type'] == "receive"){
+                                                echo "<p class='loghover fixpadding' style='margin-bottom: 5px;font-size: 14px;align-items: center;'>
+                                                Received &nbsp;<label class='btnprice green disable-selection'>$" . number_format($row['amount'], 2) . "</label> from " . $row['fromaccount'] . "</p>";
+                                            }
+
+
+
+                                            
                                         }
 
 

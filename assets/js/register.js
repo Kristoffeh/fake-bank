@@ -157,7 +157,7 @@
                         $("#trsuccess").show();
                         $('#trsuccess').html('Success');
                     }
-                    else if(dataResult.statusCode==199){
+                    else if(dataResult.statusCode==199){ // if account is negative, dont send money.
                         $("#btn_sendmoney").removeAttr("disabled");
 
                         $("#trsuccess").hide();

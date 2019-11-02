@@ -162,13 +162,13 @@ if (!$r){
 
                                                     <div class="form-group">
                                                         <p class="m-0">Recipient Account Number</p>
-                                                        <input class="form-control" type="text" placeholder="Please enter account number" id="accountnumber" value="23781736698"></div>
+                                                        <input class="form-control" type="text" placeholder="Please enter account number" id="accountnumber" value=""></div>
                                                     </div>
 
                                                     <div class="col-lg-5 col-xl-4">
                                                         <div class="form-group">
                                                             <p class="m-0">Amount</p>
-                                                            <input class="form-control quantity" type="number" id="qua" placeholder="$USD" value="550">
+                                                            <input class="form-control quantity" type="number" id="qua" placeholder="$USD" value="">
                                                             <!-- Start: number error msg -->
                                                             <span id="errmsg"></span>
                                                             <!-- End: number error msg -->
