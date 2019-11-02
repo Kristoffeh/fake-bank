@@ -129,6 +129,55 @@
             alert('Please fill all the fields!');
         }
     });
+    $('#btn_sendmoney').on('click', function() {
+        $("#btn_sendmoney").attr("disabled", "disabled");
+        var accountfrom = $('#accountfrom').val();
+        var accountnumber = $('#accountnumber').val();
+        var message = $('#message').val();
+        var quantity = $('#qua').val();
+
+        if(accountfrom != "" && accountto != ""){
+            $.ajax({
+                url: "../save.php",
+                type: "POST",
+                data: {
+                    type: 5,
+                    accountfrom: accountfrom,
+                    accountnumber: accountnumber,
+                    message: message,
+                    quantity: quantity
+                },
+                cache: false,
+                success: function(dataResult){
+                    var dataResult = JSON.parse(dataResult);
+                    if(dataResult.statusCode==200){
+                        $('#sendmoney_form').find('input:text').val('');
+
+                        $("#err").hide();
+                        $("#trsuccess").show();
+                        $('#trsuccess').html('Success');
+                    }
+                    else if(dataResult.statusCode==199){
+                        $("#btn_sendmoney").removeAttr("disabled");
+
+                        $("#trsuccess").hide();
+                        $("#trerror").show();
+                        $('#trerror').html('You dont have enough money!');
+                    }
+                    else if(dataResult.statusCode==201){
+                        $("#btn_sendmoney").removeAttr("disabled");
+
+                        $("#trsuccess").hide();
+                        $("#trerror").show();
+                        $('#trerror').html('Something went wrong.');
+                    }
+                }
+            });
+        }
+        else{
+            alert('Please fill all the fields!');
+        }
+    });
     $('#btnlogin').on('click', function() {
         var email = $('#email').val();
         var ssn = $('#ssn').val();

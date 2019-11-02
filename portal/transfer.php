@@ -130,24 +130,47 @@ if (!$r){
                     <div class="col-lg-8 col-xl-6 offset-lg-2 offset-xl-3">
                         <div>
                             <ul class="nav nav-tabs nav-fill">
-                                <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" href="#tab-1">Send Money</a></li>
-                                <li class="nav-item"><a class="nav-link active" role="tab" data-toggle="tab" href="#tab-2">Transfer</a></li>
+                                <li class="nav-item">
+                                    <a class="nav-link <?php if ($_GET['t']=='1'){echo "active";}?>" role="tab" data-toggle="tab" href="#tab-1">Send Money</a></li>
+                                <li class="nav-item">
+                                    <!-- <a class="nav-link active" role="tab" data-toggle="tab" href="#tab-2">Transfer</a></li> -->
+                                    <a class="nav-link <?php if ($_GET['t']=='2'){echo "active";}?>" role="tab" data-toggle="tab" href="#tab-2">Transfer</a></li>
                             </ul>
                             <div class="tab-content">
-                                <div class="tab-pane" role="tabpanel" id="tab-1">
+                                <div class="tab-pane <?php if ($_GET['t']=='1'){echo "active";}?>" role="tabpanel" id="tab-1">
                                     <!-- Start: Basic Card -->
                                     <div class="card shadow mb-4 fixcard fixcard">
                                         <div class="card-body fixcard">
-                                            <form>
+                                            <form id="sendmoney_form" name="form1" method="post">
+
+                                                <div class="form-row">
+                                                    <div class="col-12">
+                                                        <!--- ERROR AND SUCCESS FEEDBACK --->
+                                                        <div class="alert alert-success alert-dismissible" id="trsuccess" style="display:none;">
+                                                            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                                                        </div>
+                                                        <div class="alert alert-danger alert-dismissible" id="trerror" style="display:none;">
+                                                            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                                                        </div>
+                                                    </div>
+                                                    <!--- END FEEDBACK --->
+                                                </div>
+
+
                                                 <div class="form-row">
                                                     <div class="col-lg-7 col-xl-8 offset-lg-0">
-                                                        <div class="form-group">
-                                                            <p class="m-0">Recipient Account Number</p><input class="form-control" type="text" placeholder="Please enter account number"></div>
+
+                                                    <div class="form-group">
+                                                        <p class="m-0">Recipient Account Number</p>
+                                                        <input class="form-control" type="text" placeholder="Please enter account number" id="accountnumber" value="23781736698"></div>
                                                     </div>
+
                                                     <div class="col-lg-5 col-xl-4">
                                                         <div class="form-group">
-                                                            <p class="m-0">Amount</p><input class="form-control quantity" type="number" id="quantity" placeholder="$USD">
-                                                            <!-- Start: number error msg --><span id="errmsg"></span>
+                                                            <p class="m-0">Amount</p>
+                                                            <input class="form-control quantity" type="number" id="qua" placeholder="$USD" value="550">
+                                                            <!-- Start: number error msg -->
+                                                            <span id="errmsg"></span>
                                                             <!-- End: number error msg -->
                                                         </div>
                                                     </div>
@@ -155,8 +178,33 @@ if (!$r){
                                                 <div class="form-row">
                                                     <div class="col-lg-7 col-xl-8 offset-lg-0">
                                                         <div class="form-group">
-                                                            <p class="m-0">Message</p><textarea class="form-control" placeholder="Please enter a message (optional)"></textarea></div>
-                                                        <div class="form-group"><button class="btn btn-primary btn-block" type="button">Send</button></div>
+                                                            <p class="m-0">From
+                                                                <select class="form-control" id="accountfrom">
+                                                                    <?php
+                                                                    $id = $userRow['id'];
+
+                                                                    $result = mysqli_query($conn, "SELECT * FROM accounts WHERE belongstoid = '$id' ORDER BY accountcreation ASC");
+
+                                                                    while($row = mysqli_fetch_array($result)) {
+                                                                        echo "<option value='" . $row['accountname'] . 
+                                                                        "'>" . $row['accountname'] . " - $" 
+                                                                        . number_format($row['accountbalance'], 2) .  "</option>";
+                                                                    }
+                                                                    ?>
+                                                                    <!-- <option value="Visa Card">Visa Card - $206.16</option>
+                                                                    <option value="Savings Account">Savings Account - $46,000</option> -->
+                                                                </select>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="col-lg-7 col-xl-8 offset-lg-0">
+                                                        <div class="form-group">
+                                                            <p class="m-0">Message</p>
+                                                            <textarea class="form-control" placeholder="Please enter a message (optional)" id="message"></textarea></div>
+                                                        <div class="form-group">
+                                                            <button class="btn btn-primary btn-block" type="button" id="btn_sendmoney" name="btn_sendmoney">Send</button></div>
                                                     </div>
                                                 </div>
                                             </form>
@@ -164,7 +212,7 @@ if (!$r){
                                     </div>
                                     <!-- End: Basic Card -->
                                 </div>
-                                <div class="tab-pane active" role="tabpanel" id="tab-2">
+                                <div class="tab-pane <?php if ($_GET['t']=='2'){echo "active";}?>" role="tabpanel" id="tab-2">
                                     <!-- Start: Basic Card -->
                                     <div class="card shadow mb-4 fixcard fixcard">
                                         <div class="card-body fixcard">

@@ -175,7 +175,8 @@ if (!$r){
                                             echo "<td>" . $row['accountname'] . " (" . $row['accounttype'] . ")" . "</td>";
                                             echo "<td class='text-center'><a>" . format_accountnumber($row['accountnumber']) . "<br></a></td>";
                                             echo "<td class='text-right'>$" . number_format($row['accountbalance'], 2) . "</td>";
-                                            echo "<td class='text-right'><a href='transfer.php'>" . "Transfer" . "<br></a></td>";
+                                            echo "<td class='text-right'><a href='transfer.php?t=1'>" . "Send Money" . "<br></a></td>";
+                                            echo "<td class='text-right'><a href='transfer.php?t=2'>" . "Transfer" . "<br></a></td>";
                                             echo "</tr>";
                                         }
 
