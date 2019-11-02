@@ -172,17 +172,20 @@
 		$sql = "INSERT INTO `transactions`(`fromaccount`, `toaccount`, `message`, `amount`, `date`, `belongstoid`) 
 			VALUES ('$accountfrom','$accountnumber','$message', '$quantity', '$date', '$userid')";
 
-		if (mysqli_query($conn, $sql)) {
 
-			$x=mysqli_query($conn, "SELECT * FROM accounts WHERE belongstoid='" . $_SESSION['id'] . "' AND accountname='$accountfrom'");
-			$fromsrc=mysqli_fetch_array($x);
 
-			$y=mysqli_query($conn, "SELECT * FROM accounts WHERE accountnumber='$accountnumber'");
-			$tosrc=mysqli_fetch_array($y);
-			//
-			$fromacc = $fromsrc['accountbalance'];
 
-			if ($fromacc > 0){
+
+		$x=mysqli_query($conn, "SELECT * FROM accounts WHERE belongstoid='" . $_SESSION['id'] . "' AND accountname='$accountfrom'");
+		$fromsrc=mysqli_fetch_array($x);
+
+		$y=mysqli_query($conn, "SELECT * FROM accounts WHERE accountnumber='$accountnumber'");
+		$tosrc=mysqli_fetch_array($y);
+		//
+		$fromacc = $fromsrc['accountbalance'];
+
+		if ($fromacc > 0){
+			if (mysqli_query($conn, $sql)) {
 				echo json_encode(array("statusCode"=>200));
 				$toacc = $tosrc['accountbalance'];
 				//
@@ -191,14 +194,23 @@
 
 				mysqli_query($conn, "UPDATE accounts SET accountbalance = '$finalfromacc' WHERE belongstoid='" . $_SESSION['id'] . "' AND accountname='$accountfrom'");
 				mysqli_query($conn, "UPDATE accounts SET accountbalance = '$finaltoacc' WHERE accountnumber='$accountnumber'");
+			} 
+			else {
+				echo json_encode(array("statusCode"=>201));
 			}
-			else{
-				echo json_encode(array("statusCode"=>199));
-			}
-		} 
-		else {
-			echo json_encode(array("statusCode"=>201));
 		}
+		else{
+			echo json_encode(array("statusCode"=>199));
+		}
+
+
+
+
+
+
+
+
+
 
 		mysqli_close($conn);
 	}
