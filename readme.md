@@ -1,5 +1,5 @@
 # Fake Bank
-The fake bank is a webbased bootstrap webpage based on jQuery AJAX, MySQL and PHP.
+The fake bank is a webproject. Features are shown below.
 
 ## Features
 * Registration page
@@ -11,3 +11,12 @@ The fake bank is a webbased bootstrap webpage based on jQuery AJAX, MySQL and PH
 * Notification system
 * Transfer money between your own accounts
 * Send money to another user
+* Payments log
+
+## References
+#### What´s used for the project
+* Bootstrap 4.3
+* jQuery
+* jQuery AJAX
+* MySQL from Oracle
+* PHP
