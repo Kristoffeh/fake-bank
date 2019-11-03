@@ -1,4 +1,4 @@
-    $(document).ready(function() {
+    $(document).ready(function() { 
     /*$('#login').on('click', function() {
         $("#login_form").show();
         $("#register_form").hide();
@@ -89,10 +89,10 @@
     });
     $('#btntransfer').on('click', function() {
         $("#btntransfer").attr("disabled", "disabled");
-        var accountfrom = $('#accountfrom').val();
-        var accountto = $('#accountto').val();
-        var message = $('#message').val();
-        var quantity = $('#qua').val();
+        var accountfrom = $('#transferfrom').val();
+        var accountto = $('#transferto').val();
+        var message = $('#transfermessage').val();
+        var quantity = $('#transferquantity').val();
 
         if(accountfrom != "" && accountto != ""){
             $.ajax({

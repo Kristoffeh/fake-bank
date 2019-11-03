@@ -146,10 +146,10 @@ if (!$r){
                                                 <div class="form-row">
                                                     <div class="col-12">
                                                         <!--- ERROR AND SUCCESS FEEDBACK --->
-                                                        <div class="alert alert-success alert-dismissible" id="trsuccess" style="display:none;">
+                                                        <div class="alert alert-success alert-dismissible" id="sesuccess" style="display:none;">
                                                             <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
                                                         </div>
-                                                        <div class="alert alert-danger alert-dismissible" id="trerror" style="display:none;">
+                                                        <div class="alert alert-danger alert-dismissible" id="seerror" style="display:none;">
                                                             <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
                                                         </div>
                                                     </div>
@@ -231,7 +231,7 @@ if (!$r){
 
                                                         <div class="form-group">
                                                             <p class="m-0">From
-                                                                <select class="form-control" id="accountfrom">
+                                                                <select class="form-control" id="transferfrom">
                                                                     <?php
                                                                     $id = $userRow['id'];
 
@@ -255,7 +255,7 @@ if (!$r){
                                                     <div class="col-lg-12 col-xl-12 offset-lg-0">
                                                         <div class="form-group">
                                                             <p class="m-0">To
-                                                                <select class="form-control" id="accountto">
+                                                                <select class="form-control" id="transferto">
 
                                                                         <?php
                                                                         $id = $userRow['id'];
@@ -275,13 +275,13 @@ if (!$r){
                                                     <div class="col-lg-7 col-xl-8 offset-lg-0">
                                                         <div class="form-group">
                                                             <p class="m-0">Message</p>
-                                                            <textarea class="form-control" placeholder="Please enter a message (optional)" name="message" id="message"></textarea>
+                                                            <textarea class="form-control" placeholder="Please enter a message (optional)" name="transfermessage" id="transfermessage"></textarea>
                                                         </div>
                                                     </div>
                                                     <div class="col">
                                                         <div class="form-group">
                                                             <p class="m-0">Amount</p>
-                                                            <input class="form-control quantity" type="number" name="quantity" id="qua" placeholder="$USD">
+                                                            <input class="form-control quantity" type="number" name="transferquantity" id="transferquantity" placeholder="$USD">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-7 col-xl-8 offset-lg-0">

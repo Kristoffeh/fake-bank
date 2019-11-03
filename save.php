@@ -135,8 +135,8 @@
 		$quantity = $_POST['quantity'];
 		$userid = $_SESSION['id'];
 
-		$sql = "INSERT INTO `transactions`(`fromaccount`, `toaccount`, `message`, `amount`, `date`, `belongstoid`,`type`) 
-			VALUES ('$accountfrom','$accountto','$message', '$quantity', '$date', '$userid', 'transfer')";
+		$sql = "INSERT INTO `transactions`(`fromaccount`, `toaccount`, `message`, `amount`, `date`, `belongstoid`) 
+			VALUES ('$accountfrom','$accountto','$message', '$quantity', '$date', '$userid')";
 
 		if (mysqli_query($conn, $sql)) {
 			echo json_encode(array("statusCode"=>200));
@@ -146,10 +146,10 @@
 
 			$y=mysqli_query($conn, "SELECT * FROM accounts WHERE belongstoid='" . $_SESSION['id'] . "' AND accountname='$accountto'");
 			$tosrc=mysqli_fetch_array($y);
-			//
+
 			$fromacc = $fromsrc['accountbalance'];
 			$toacc = $tosrc['accountbalance'];
-			//
+
 			$finalfromacc = $fromacc - $quantity;
 			$finaltoacc = $toacc + $quantity;
 
@@ -203,16 +203,6 @@
 		else{
 			echo json_encode(array("statusCode"=>199));
 		}
-
-
-
-
-
-
-
-
-
-
 		mysqli_close($conn);
 	}
 ?>
