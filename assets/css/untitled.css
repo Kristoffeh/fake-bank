@@ -1,6 +1,6 @@
 .btnprice {
-  border-radius: 5px;
-  padding: 1px 6px 1px 6px;
+  border-radius: 4px;
+  padding: 1px 4px 0px 4px;
   color: #ffffff;
   font-size: 13px;
 }
@@ -12,7 +12,7 @@
   /*color: #ffffff;*/
 }
 
-.btnprice .red {
+.btnprice .red{
   background-color: #e74a3b;
   border-radius: 5px;
   padding: 1px 6px 1px 6px;
@@ -25,6 +25,10 @@
 
 .yellow {
   background-color: #f6c23e;
+}
+
+.dark{
+  background-color: #b5b5b5;
 }
 
 .givemargin {

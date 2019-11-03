@@ -130,7 +130,7 @@ if (!$r){
             </nav>
             <div class="container-fluid">
                 <div class="d-sm-flex justify-content-between align-items-center mb-4">
-                    <h3 class="text-dark mb-0">Statistics</h3>
+                    <h3 class="text-dark mb-0">Dashboard</h3>
                 </div>
                 <div class="row">
                     <div class="col-lg-7">
@@ -256,30 +256,23 @@ if (!$r){
                                         }
 
                                         while($row = mysqli_fetch_array($rs)) {
-/*                                            if ($row['type'] == "asg"){
-                                                echo "<p class='loghover fixpadding' style='margin-bottom: 5px;font-size: 14px;align-items: center;'>
-                                                Transferred &nbsp;<label class='btnprice green disable-selection'>$" . number_format($row['amount'], 2) . "</label> from " . $row['fromaccount'] . " to " . $row['toaccount'] . "</p>";
-                                            }
-                                            
-                                            if ($row['type'] == "asf"){
-                                                echo "<p class='loghover fixpadding' style='margin-bottom: 5px;font-size: 14px;align-items: center;'>
-                                                Sent &nbsp;<label class='btnprice red disable-selection'>$" . number_format($row['amount'], 2) . "</label> from " . $row['fromaccount'] . " to " . $row['toaccount'] . "</p>";
-                                            }
-                                            
-                                            if ($row['type'] == "asd"){
-                                                echo "<p class='loghover fixpadding' style='margin-bottom: 5px;font-size: 14px;align-items: center;'>
-                                                Received &nbsp;<label class='btnprice green disable-selection'>$" . number_format($row['amount'], 2) . "</label> from " . $row['fromaccount'] . "</p>";
-                                            }*/
 
                                             if ($row['type'] == "send"){
                                                 if ($row['belongstoid'] == $i){
                                                     echo "<p class='loghover fixpadding' style='margin-bottom: 5px;font-size: 14px;align-items: center;'>
-                                                Sent &nbsp;<label class='btnprice red disable-selection'>$" . number_format($row['amount'], 2) . "</label> from " . $row['fromaccount'] . " to " . $row['toaccount'] . "</p>";
+                                                Sent &nbsp;<label class='btnprice red disable-selection'>$" . number_format($row['amount'], 2) . "</label> " . " to " . $row['toaccount'] . "</p>";
                                                 }
 
                                                 if ($row['recipientid'] == $i){
                                                     echo "<p class='loghover fixpadding' style='margin-bottom: 5px;font-size: 14px;align-items: center;'>
-                                                Received &nbsp;<label class='btnprice green disable-selection'>$" . number_format($row['amount'], 2) . "</label> from " . $row['fromaccount'] . " to " . $row['toaccount'] . "</p>";
+                                                Received &nbsp;<label class='btnprice green disable-selection'>$" . number_format($row['amount'], 2) . "</label> from " . $row['fromaccount'] . "</p>";
+                                                }
+                                            }
+
+                                            if ($row['type'] == "transfer"){
+                                                if ($row['belongstoid'] == $i){
+                                                    echo "<p class='loghover fixpadding' style='margin-bottom: 5px;font-size: 14px;align-items: center;'>
+                                                Transferred &nbsp;<label class='btnprice green disable-selection'>$" . number_format($row['amount'], 2) . "</label> from " . $row['fromaccount'] . " to " . $row['toaccount'] . "</p>";
                                                 }
                                             }
                                         }
