@@ -249,31 +249,39 @@ if (!$r){
                                         $tosrc=mysqli_fetch_array($y);
 
                                         // $rs = mysqli_query($conn, "SELECT * FROM transactions WHERE belongstoid = '$id' ORDER BY id DESC LIMIT 5");
-                                        $rs = mysqli_query($conn, "SELECT * FROM transactions WHERE belongstoid = '$id' OR toaccount='" . $tosrc['accountnumber'] . "' ORDER BY id DESC LIMIT 10");
+                                        $rs = mysqli_query($conn, "SELECT * FROM transactions WHERE belongstoid = '$id' OR recipientid='" . $i . "' ORDER BY id DESC LIMIT 10");
 
                                         if (mysqli_num_rows($rs) == 0){
                                             echo "<center>There is nothing to find here..</center>";
                                         }
 
                                         while($row = mysqli_fetch_array($rs)) {
-                                            if ($row['type'] == "transfer"){
+/*                                            if ($row['type'] == "asg"){
                                                 echo "<p class='loghover fixpadding' style='margin-bottom: 5px;font-size: 14px;align-items: center;'>
                                                 Transferred &nbsp;<label class='btnprice green disable-selection'>$" . number_format($row['amount'], 2) . "</label> from " . $row['fromaccount'] . " to " . $row['toaccount'] . "</p>";
                                             }
                                             
-                                            if ($row['type'] == "send"){
+                                            if ($row['type'] == "asf"){
                                                 echo "<p class='loghover fixpadding' style='margin-bottom: 5px;font-size: 14px;align-items: center;'>
-                                                Sent &nbsp;<label class='btnprice red disable-selection'>$-" . number_format($row['amount'], 2) . "</label> from " . $row['fromaccount'] . " to " . $row['toaccount'] . "</p>";
+                                                Sent &nbsp;<label class='btnprice red disable-selection'>$" . number_format($row['amount'], 2) . "</label> from " . $row['fromaccount'] . " to " . $row['toaccount'] . "</p>";
                                             }
                                             
-                                            if ($row['type'] == "receive"){
+                                            if ($row['type'] == "asd"){
                                                 echo "<p class='loghover fixpadding' style='margin-bottom: 5px;font-size: 14px;align-items: center;'>
                                                 Received &nbsp;<label class='btnprice green disable-selection'>$" . number_format($row['amount'], 2) . "</label> from " . $row['fromaccount'] . "</p>";
+                                            }*/
+
+                                            if ($row['type'] == "send"){
+                                                if ($row['belongstoid'] == $i){
+                                                    echo "<p class='loghover fixpadding' style='margin-bottom: 5px;font-size: 14px;align-items: center;'>
+                                                Sent &nbsp;<label class='btnprice red disable-selection'>$" . number_format($row['amount'], 2) . "</label> from " . $row['fromaccount'] . " to " . $row['toaccount'] . "</p>";
+                                                }
+
+                                                if ($row['recipientid'] == $i){
+                                                    echo "<p class='loghover fixpadding' style='margin-bottom: 5px;font-size: 14px;align-items: center;'>
+                                                Received &nbsp;<label class='btnprice green disable-selection'>$" . number_format($row['amount'], 2) . "</label> from " . $row['fromaccount'] . " to " . $row['toaccount'] . "</p>";
+                                                }
                                             }
-
-
-
-                                            
                                         }
 
 

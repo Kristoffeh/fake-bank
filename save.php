@@ -169,17 +169,19 @@
 		$sendquantity = $_POST['quantity'];
 		$id = $_SESSION['id'];
 
-		$sql = "INSERT INTO `transactions`(`fromaccount`, `toaccount`, `message`, `amount`, `date`, `belongstoid`, `type`) 
-			VALUES ('$sendfrom','$sendto','$sendmessage', '$sendquantity', '$date', '$id', 'send')";
+		$y=mysqli_query($conn, "SELECT * FROM accounts WHERE accountnumber='$sendto'");
+		$tosrc=mysqli_fetch_array($y);
+
+		$mottakerid = $tosrc['belongstoid'];
+
+		$sql = "INSERT INTO `transactions`(`fromaccount`, `toaccount`, `message`, `amount`, `date`, `belongstoid`, `type`, `recipientid`) 
+			VALUES ('$sendfrom','$sendto','$sendmessage', '$sendquantity', '$date', '$id', 'send', '$mottakerid')";
 		
 		if (mysqli_query($conn, $sql)) {
 			echo json_encode(array("statusCode"=>200));
 
 			$x=mysqli_query($conn, "SELECT * FROM accounts WHERE belongstoid='$id' AND accountname='$sendfrom'");
 			$fromsrc=mysqli_fetch_array($x);
-
-			$y=mysqli_query($conn, "SELECT * FROM accounts WHERE accountnumber='$sendto'");
-			$tosrc=mysqli_fetch_array($y);
 
 			$fromacc = $fromsrc['accountbalance'];
 			$toacc = $tosrc['accountbalance'];
