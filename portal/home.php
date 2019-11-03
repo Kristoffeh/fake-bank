@@ -151,6 +151,14 @@ if (!$r){
                             <div class="card-body" style="padding-bottom: 10px;">
                                 <div class="table-responsive table-borderless">
                                     <table class="table table-bordered table-hover table-sm" id="accTable">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-left">Name</th>
+                                                <th class="text-left">Account Number</th>
+                                                <th class="text-left">Balance</th>
+                                                <th class="text-left">Action</th>
+                                            </tr>
+                                        </thead>
                                         <tbody>
 
                                         <?php
@@ -172,12 +180,12 @@ if (!$r){
 
                                         while($row = mysqli_fetch_array($result)) {
                                             echo "<tr>";
-                                            echo "<td>" . $row['accountname'] . " (" . $row['accounttype'] . ")" . "</td>";
+                                            echo "<td>" . $row['accountname'] . " <span style='color: #b7b9c9;'>(" . $row['accounttype'] . ")</label>" . "</td>";
                                             /*echo "<td class='text-center'><a>" . format_accountnumber($row['accountnumber']) . "<br></a></td>";*/
-                                            echo "<td class='text-center'><a>" . $row['accountnumber'] . "<br></a></td>";
-                                            echo "<td class='text-right'>$" . number_format($row['accountbalance'], 2) . "</td>";
-                                            echo "<td class='text-right'><a href='transfer.php?t=1'>" . "Send Money" . "<br></a></td>";
-                                            echo "<td class='text-right'><a href='transfer.php?t=2'>" . "Transfer" . "<br></a></td>";
+                                            echo "<td class='text-left'><a>" . $row['accountnumber'] . "<br></a></td>";
+                                            echo "<td class='text-left'>$" . number_format($row['accountbalance'], 0) . "</td>";
+                                            echo "<td class='text-left'><a href='transfer.php?t=1'>" . "Send Money" . "<br></a></td>";
+                                            echo "<td class='text-left'><a href='transfer.php?t=2'>" . "Transfer" . "<br></a></td>";
                                             echo "</tr>";
                                         }
 
@@ -255,24 +263,55 @@ if (!$r){
                                             echo "<center>There is nothing to find here..</center>";
                                         }
 
+                                        
+
+
+
                                         while($row = mysqli_fetch_array($rs)) {
+
+                                            // Method to show name of user instead of account number //
+                                            $o=mysqli_query($conn, "SELECT * FROM accounts WHERE accountnumber='" . $row['fromaccount'] . "'");
+                                            $selid=mysqli_fetch_array($o);
+
+                                            // for recipient
+                                            $q=mysqli_query($conn, "SELECT * FROM accounts WHERE accountnumber='" . $row['toaccount'] . "'");
+                                            $selrecid=mysqli_fetch_array($q);
+
+
+                                            $uid = $selid['belongstoid'];
+
+                                            // for recipient
+                                            $pid = $selrecid['belongstoid'];
+
+                                            $o=mysqli_query($conn, "SELECT * FROM users WHERE id='" . $uid . "'");
+                                            $selid=mysqli_fetch_array($o);
+
+                                            // for recipient
+                                            $t=mysqli_query($conn, "SELECT * FROM users WHERE id='" . $pid . "'");
+                                            $selide=mysqli_fetch_array($t);
+
+                                            $nm = $selid['name'];
+
+                                            // for recipient
+                                            $recnm = $selide['name'];
+                                            // End of method //
 
                                             if ($row['type'] == "send"){
                                                 if ($row['belongstoid'] == $i){
                                                     echo "<p class='loghover fixpadding' style='margin-bottom: 5px;font-size: 14px;align-items: center;'>
-                                                Sent &nbsp;<label class='btnprice red disable-selection'>$" . number_format($row['amount'], 2) . "</label> " . " to " . $row['toaccount'] . "</p>";
+                                                Sent &nbsp;<label class='btnprice red disable-selection'>$" . number_format($row['amount'], 0) . "</label> " . " to <label class='btnprice dark disable-selection'>" . $recnm . "</label></p>";
                                                 }
 
                                                 if ($row['recipientid'] == $i){
                                                     echo "<p class='loghover fixpadding' style='margin-bottom: 5px;font-size: 14px;align-items: center;'>
-                                                Received &nbsp;<label class='btnprice green disable-selection'>$" . number_format($row['amount'], 2) . "</label> from " . $row['fromaccount'] . "</p>";
+                                                Received &nbsp;<label class='btnprice green disable-selection'>$" . number_format($row['amount'], 0) . "</label> from <label class='btnprice dark disable-selection'>" . $nm . "</label></p>";
                                                 }
                                             }
 
                                             if ($row['type'] == "transfer"){
                                                 if ($row['belongstoid'] == $i){
                                                     echo "<p class='loghover fixpadding' style='margin-bottom: 5px;font-size: 14px;align-items: center;'>
-                                                Transferred &nbsp;<label class='btnprice green disable-selection'>$" . number_format($row['amount'], 2) . "</label> from " . $row['fromaccount'] . " to " . $row['toaccount'] . "</p>";
+                                                Transferred &nbsp;<label class='btnprice green disable-selection'>$" . number_format($row['amount'], 0) . "</label> from <label class='btnprice dark disable-selection'>" . $row['fromaccount'] . "</label> to <label class='btnprice dark disable-selection'>" . $row['toaccount'] . "</label></p>";
                                                 }
                                             }
                                         }
