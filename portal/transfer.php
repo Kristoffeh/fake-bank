@@ -162,13 +162,13 @@ if (!$r){
 
                                                     <div class="form-group">
                                                         <p class="m-0">Recipient Account Number</p>
-                                                        <input class="form-control" type="text" placeholder="Please enter account number" id="accountnumber" value=""></div>
+                                                        <input class="form-control" type="text" placeholder="Please enter account number" id="sendaccountto" value=""></div>
                                                     </div>
 
                                                     <div class="col-lg-5 col-xl-4">
                                                         <div class="form-group">
                                                             <p class="m-0">Amount</p>
-                                                            <input class="form-control quantity" type="number" id="qua" placeholder="$USD" value="">
+                                                            <input class="form-control quantity" type="number" id="sendquantity" placeholder="$USD" value="">
                                                             <!-- Start: number error msg -->
                                                             <span id="errmsg"></span>
                                                             <!-- End: number error msg -->
@@ -179,7 +179,7 @@ if (!$r){
                                                     <div class="col-lg-7 col-xl-8 offset-lg-0">
                                                         <div class="form-group">
                                                             <p class="m-0">From
-                                                                <select class="form-control" id="accountfrom">
+                                                                <select class="form-control" id="sendaccountfrom">
                                                                     <?php
                                                                     $id = $userRow['id'];
 
@@ -202,9 +202,11 @@ if (!$r){
                                                     <div class="col-lg-7 col-xl-8 offset-lg-0">
                                                         <div class="form-group">
                                                             <p class="m-0">Message</p>
-                                                            <textarea class="form-control" placeholder="Please enter a message (optional)" id="message"></textarea></div>
+                                                            <textarea class="form-control" placeholder="Please enter a message (optional)" id="sendmessage"></textarea>
+                                                        </div>
                                                         <div class="form-group">
-                                                            <button class="btn btn-primary btn-block" type="button" id="btn_sendmoney" name="btn_sendmoney">Send</button></div>
+                                                            <button class="btn btn-primary btn-block" type="button" id="btnsendmoney" name="btnsendmoney">Send</button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </form>

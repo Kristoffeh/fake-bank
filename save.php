@@ -163,46 +163,40 @@
 		mysqli_close($conn);
 	}
 	if($_POST['type']==5){
-		$accountfrom = $_POST['accountfrom'];
-		$accountnumber = $_POST['accountnumber'];
-		$message = $_POST['message'];
-		$quantity = $_POST['quantity'];
-		$userid = $_SESSION['id'];
+		$sendfrom = $_POST['accountfrom'];
+		$sendto = $_POST['accountnumber'];
+		$sendmessage = $_POST['message'];
+		$sendquantity = $_POST['quantity'];
+		$id = $_SESSION['id'];
 
 		$sql = "INSERT INTO `transactions`(`fromaccount`, `toaccount`, `message`, `amount`, `date`, `belongstoid`, `type`) 
-			VALUES ('$accountfrom','$accountnumber','$message', '$quantity', '$date', '$userid', 'send')";
+			VALUES ('$sendfrom','$sendto','$sendmessage', '$sendquantity', '$date', '$id', 'send')";
+		
+		if (mysqli_query($conn, $sql)) {
+			echo json_encode(array("statusCode"=>200));
 
-		$x=mysqli_query($conn, "SELECT * FROM accounts WHERE belongstoid='" . $_SESSION['id'] . "' AND accountname='$accountfrom'");
-		$fromsrc=mysqli_fetch_array($x);
+			$x=mysqli_query($conn, "SELECT * FROM accounts WHERE belongstoid='$id' AND accountname='$sendfrom'");
+			$fromsrc=mysqli_fetch_array($x);
 
-		$y=mysqli_query($conn, "SELECT * FROM accounts WHERE accountnumber='$accountnumber'");
-		$tosrc=mysqli_fetch_array($y);
-		//
-		$fromacc = $fromsrc['accountbalance'];
+			$y=mysqli_query($conn, "SELECT * FROM accounts WHERE accountnumber='$sendto'");
+			$tosrc=mysqli_fetch_array($y);
 
-		if ($fromacc > 0){
-			if (mysqli_query($conn, $sql)) {
-				echo json_encode(array("statusCode"=>200));
-				$toacc = $tosrc['accountbalance'];
-				//
-				$finalfromacc = $fromacc - $quantity;
-				$finaltoacc = $toacc + $quantity;
+			$fromacc = $fromsrc['accountbalance'];
+			$toacc = $tosrc['accountbalance'];
+			//
+			$finalfromacc = $fromacc - $sendquantity;
+			$finaltoacc = $toacc + $sendquantity;
 
-				mysqli_query($conn, "UPDATE accounts SET accountbalance = '$finalfromacc' WHERE belongstoid='" . $_SESSION['id'] . "' AND accountname='$accountfrom'");
-				mysqli_query($conn, "UPDATE accounts SET accountbalance = '$finaltoacc' WHERE accountnumber='$accountnumber'");
+			mysqli_query($conn, "UPDATE accounts SET accountbalance='$finalfromacc' WHERE belongstoid='$id' AND accountname='$sendfrom'");
+			mysqli_query($conn, "UPDATE accounts SET accountbalance='$finaltoacc' WHERE accountnumber='$sendto'");
 
-				// Update transaction log of recipient
-/*				$srcid = $tosrc['id'];
-				mysqli_query($conn, "INSERT INTO `transactions`(`fromaccount`, `toaccount`, `message`, `amount`, `date`, `belongstoid`,`type`) 
-				VALUES ('$accountfrom','$accountto','$message', '$quantity', '$date', '$srcid', 'receive')");*/
-			} 
-			else {
-				echo json_encode(array("statusCode"=>201));
-			}
+			// mysqli_query($conn, "UPDATE accounts SET accountbalance = '$finalfromacc' WHERE belongstoid='" . $_SESSION['id'] . "' AND accountname='$accountfrom'");
+			// mysqli_query($conn, "UPDATE accounts SET accountbalance = '$finaltoacc' WHERE belongstoid='" . $_SESSION['id'] . "' AND accountname='$accountto'");
 		}
 		else{
-			echo json_encode(array("statusCode"=>199));
+			echo json_encode(array("statusCode"=>201));
 		}
+
 		mysqli_close($conn);
 	}
 ?>

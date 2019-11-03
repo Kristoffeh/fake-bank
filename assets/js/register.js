@@ -129,14 +129,14 @@
             alert('Please fill all the fields!');
         }
     });
-    $('#btn_sendmoney').on('click', function() {
-        $("#btn_sendmoney").attr("disabled", "disabled");
-        var accountfrom = $('#accountfrom').val();
-        var accountnumber = $('#accountnumber').val();
-        var message = $('#message').val();
-        var quantity = $('#qua').val();
+    $('#btnsendmoney').on('click', function() {
+        $("#btnsendmoney").attr("disabled", "disabled");
+        var accountfrom = $('#sendaccountfrom').val();
+        var accountnumber = $('#sendaccountto').val();
+        var message = $('#sendmessage').val();
+        var quantity = $('#sendquantity').val();
 
-        if(accountfrom != "" && accountto != ""){
+        if(accountfrom != "" && accountnumber != ""){
             $.ajax({
                 url: "../save.php",
                 type: "POST",
@@ -153,23 +153,16 @@
                     if(dataResult.statusCode==200){
                         $('#sendmoney_form').find('input:text').val('');
 
-                        $("#err").hide();
-                        $("#trsuccess").show();
-                        $('#trsuccess').html('Success');
-                    }
-                    else if(dataResult.statusCode==199){ // if account is negative, dont send money.
-                        $("#btn_sendmoney").removeAttr("disabled");
-
-                        $("#trsuccess").hide();
-                        $("#trerror").show();
-                        $('#trerror').html('You dont have enough money!');
+                        $("#seerror").hide();
+                        $("#sesuccess").show();
+                        $('#sesuccess').html('Success');
                     }
                     else if(dataResult.statusCode==201){
-                        $("#btn_sendmoney").removeAttr("disabled");
+                        $("#btnsendmoney").removeAttr("disabled");
 
-                        $("#trsuccess").hide();
-                        $("#trerror").show();
-                        $('#trerror').html('Something went wrong.');
+                        $("#sesuccess").hide();
+                        $("#seerror").show();
+                        $('#seerror').html('Something went wrong.');
                     }
                 }
             });

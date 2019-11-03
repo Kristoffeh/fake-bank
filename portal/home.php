@@ -249,7 +249,7 @@ if (!$r){
                                         $tosrc=mysqli_fetch_array($y);
 
                                         // $rs = mysqli_query($conn, "SELECT * FROM transactions WHERE belongstoid = '$id' ORDER BY id DESC LIMIT 5");
-                                        $rs = mysqli_query($conn, "SELECT * FROM transactions WHERE belongstoid = '$id' OR toaccount='" . $tosrc['accountnumber'] . "' ORDER BY id DESC LIMIT 5");
+                                        $rs = mysqli_query($conn, "SELECT * FROM transactions WHERE belongstoid = '$id' OR toaccount='" . $tosrc['accountnumber'] . "' ORDER BY id DESC LIMIT 10");
 
                                         if (mysqli_num_rows($rs) == 0){
                                             echo "<center>There is nothing to find here..</center>";
