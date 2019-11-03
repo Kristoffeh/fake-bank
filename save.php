@@ -180,7 +180,7 @@
 		if (mysqli_query($conn, $sql)) {
 			echo json_encode(array("statusCode"=>200));
 
-			$x=mysqli_query($conn, "SELECT * FROM accounts WHERE belongstoid='$id' AND accountname='$sendfrom'");
+			$x=mysqli_query($conn, "SELECT * FROM accounts WHERE belongstoid='$id' AND accountnumber='$sendfrom'");
 			$fromsrc=mysqli_fetch_array($x);
 
 			$fromacc = $fromsrc['accountbalance'];
@@ -189,7 +189,7 @@
 			$finalfromacc = $fromacc - $sendquantity;
 			$finaltoacc = $toacc + $sendquantity;
 
-			mysqli_query($conn, "UPDATE accounts SET accountbalance='$finalfromacc' WHERE belongstoid='$id' AND accountname='$sendfrom'");
+			mysqli_query($conn, "UPDATE accounts SET accountbalance='$finalfromacc' WHERE belongstoid='$id' AND accountnumber='$sendfrom'");
 			mysqli_query($conn, "UPDATE accounts SET accountbalance='$finaltoacc' WHERE accountnumber='$sendto'");
 
 			// mysqli_query($conn, "UPDATE accounts SET accountbalance = '$finalfromacc' WHERE belongstoid='" . $_SESSION['id'] . "' AND accountname='$accountfrom'");

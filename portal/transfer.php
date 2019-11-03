@@ -186,7 +186,7 @@ if (!$r){
                                                                     $result = mysqli_query($conn, "SELECT * FROM accounts WHERE belongstoid = '$id' ORDER BY accountcreation ASC");
 
                                                                     while($row = mysqli_fetch_array($result)) {
-                                                                        echo "<option value='" . $row['accountname'] . 
+                                                                        echo "<option value='" . $row['accountnumber'] . 
                                                                         "'>" . $row['accountname'] . " - $" 
                                                                         . number_format($row['accountbalance'], 2) .  "</option>";
                                                                     }
