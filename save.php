@@ -35,7 +35,7 @@
 
 			if (mysqli_query($conn, $sql)) {
 				echo json_encode(array("statusCode"=>200));
-			} 
+			}
 			else {
 				echo json_encode(array("statusCode"=>201));
 			}
@@ -82,36 +82,45 @@
 		mysqli_close($conn);
 	}
 
-	//Function to generate unique alpha numeric code
-	function generateRandomNumer($conn){
+	if($_POST['type'] == 3){
+
 		// Gets today's date and time
 		$creation_date = date("d/m/Y H:i");
 
 		// Get user ID
 		$y_id = $_SESSION['id'];
-	    $randomString = rand(10000000000, 99999999999);
+	    
+	    $accountnumber = "12345678";
 
 	    // Get values from textboxes
-	    $accountname=$_POST['accountname'];
-		$accounttype=$_POST['accounttype'];
-		$balance=1000.00;
+	    $accountname = $_POST["accountname"];
+		$accounttype = $_POST["accounttype"];
+		$balance = 1000.00;
 
-	    //Check newly generated Code exist in DB table or not.
-	    $query = "SELECT * FROM accounts WHERE accountnumber='" . $randomString . "'";
-	    $result=mysqli_query($conn,$query);
-	    $resultCount=mysqli_num_rows($result);
+		//Function to generate unique alpha numeric code
+		function generateRandomNumer($conn) {
+			$randomString = rand(10000000000, 99999999999);
 
-	    if($resultCount>0){
-	        //IF code is already exist then function will call it self until unique code has been generated and inserted in Db.
-	        generateRandomNumer($conn);
-	    }
-	    else{
-	        //Unique generated code will be inserted in DB.
-	        $sql = mysqli_query($conn,"INSERT INTO `accounts`(`accountname`, `accounttype`, `accountnumber`, `accountcreation`, `accountbalance`, `belongstoid`) VALUES('$accountname','$accounttype','$randomString','$creation_date','$balance', '$y_id')");
-	    }
-	}
+			//Check newly generated Code exist in DB table or not.
+		    $query = "SELECT * FROM accounts WHERE accountnumber=" . $randomString;
+		    $result=mysqli_query($conn,$query);
+		    $resultCount=mysqli_num_rows($result);
 
-	if($_POST['type']==3){
+		    if($resultCount>0){
+
+		        //IF code is already exist then function will call it self until unique code has been generated and inserted in Db.
+		        
+		    }
+		    else{
+		    	return $randomString;
+/*		        //Unique generated code will be inserted in DB.
+		        $sql = mysqli_query($conn,"INSERT INTO accounts (accountname, accounttype, accountnumber, accountcreation, accountbalance, belongstoid) VALUES('$accountname','$accounttype','$randomString','$creation_date','$balance', '$y_id')");*/
+		    }
+		}
+		
+		$accountnumber = generateRandomNumer($conn);
+		$sql = "INSERT INTO accounts (accountname, accounttype, accountnumber, accountcreation, accountbalance, belongstoid) VALUES('$accountname','$accounttype','$accountnumber','$creation_date','$balance', '$y_id')";
+
 		//Loop to insert number of unique code in DB.
 		//NUM_OF_RECORD_YOU_WANT_TO_INSERT define constant which contain number of unique codes you wants to insert in DB. 
 		for($i = 0; $i < 1 ; $i++){
@@ -120,8 +129,6 @@
 
 		if (mysqli_query($conn, $sql)) {
 			echo json_encode(array("statusCode"=>200));
-
-
 		} 
 		else {
 			echo json_encode(array("statusCode"=>201));

@@ -12,12 +12,12 @@
   /*color: #ffffff;*/
 }
 
-.btnprice .red{
+/*.btnprice .red{
   background-color: #e74a3b;
   border-radius: 5px;
   padding: 1px 6px 1px 6px;
   color: #ffffff;
-}
+}*/
 
 .red {
   background-color: #e74a3b;
@@ -28,11 +28,15 @@
 }
 
 .dark{
-  background-color: #b5b5b5;
+  background-color: #bdbdbd;
 }
 
 .givemargin {
   margin-left: 5px;
+}
+
+.cw{
+  color: #fff;
 }
 
 .loghover:hover {
@@ -41,7 +45,9 @@
 }
 
 .fixpadding {
-  padding-top: 5px;
+  padding-top: 4px;
+  padding-bottom: 0px;
+  margin-bottom: 2px; /* Space between each entry */
   padding-left: 8px;
 }
 

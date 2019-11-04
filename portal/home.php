@@ -4,6 +4,7 @@ session_start();
 
 include '../scripts/logincheck.php';
 require '../require/dbconnect.php';
+require '../scripts/functions.php';
 
 $r=mysqli_query($conn, "SELECT * FROM users WHERE id='" . $_SESSION['id'] . "'");
 $userRow=mysqli_fetch_array($r);
@@ -149,6 +150,18 @@ if (!$r){
                                 </div>
                             </div>
                             <div class="card-body" style="padding-bottom: 10px;">
+                                <div class="form-row">
+                                    <div class="col-12">
+                                        <!--- ERROR AND SUCCESS FEEDBACK --->
+                                        <div class="alert alert-success alert-dismissible" id="succ" style="display:none;">
+                                            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                                        </div>
+                                        <div class="alert alert-danger alert-dismissible" id="err" style="display:none;">
+                                            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                                        </div>
+                                    </div>
+                                    <!--- END FEEDBACK --->
+                                </div>
                                 <div class="table-responsive table-borderless">
                                     <table class="table table-bordered table-hover table-sm" id="accTable">
                                         <thead>
@@ -165,7 +178,7 @@ if (!$r){
                                         $tempname = "accounts";
                                         $id = $userRow['id'];
 
-                                        $result = mysqli_query($conn, "SELECT * FROM $tempname WHERE belongstoid = '$id' ORDER BY accountcreation ASC");
+                                        $resultt = mysqli_query($conn, "SELECT * FROM $tempname WHERE belongstoid = '$id' ORDER BY accountcreation ASC");
 
                                         // Format the account number to not show the entire account number. 7 numbers are hidden while the last 4 numbers are visible.
                                         function format_accountnumber ($n){
@@ -174,19 +187,24 @@ if (!$r){
                                             return $y . $x;
                                         }
 
-                                        if (mysqli_num_rows($result) == 0){
-                                            echo "<center>You don't have any registered accounts</center>";
-                                        }
+                                        
 
-                                        while($row = mysqli_fetch_array($result)) {
+                                        while($row = mysqli_fetch_array($resultt)) {
                                             echo "<tr>";
+
+
+
                                             echo "<td>" . $row['accountname'] . " <span style='color: #b7b9c9;'>(" . $row['accounttype'] . ")</label>" . "</td>";
                                             /*echo "<td class='text-center'><a>" . format_accountnumber($row['accountnumber']) . "<br></a></td>";*/
-                                            echo "<td class='text-left'><a>" . $row['accountnumber'] . "<br></a></td>";
-                                            echo "<td class='text-left'>$" . number_format($row['accountbalance'], 0) . "</td>";
+                                            echo "<td class='text-left'><a>" . $row['accountnumber'] . "</a></td>";
+                                            echo "<td class='text-left'><a>$" . number_format($row['accountbalance'], 0) . "</a></td>";
                                             echo "<td class='text-left'><a href='transfer.php?t=1'>" . "Send Money" . "<br></a></td>";
                                             echo "<td class='text-left'><a href='transfer.php?t=2'>" . "Transfer" . "<br></a></td>";
                                             echo "</tr>";
+                                        }
+
+                                        if (mysqli_num_rows($resultt) == 0){
+                                            echo "<center>You don't have any registered accounts</center>";
                                         }
 
 
@@ -195,18 +213,12 @@ if (!$r){
                                         </tbody>
                                     </table>
                                 </div>
-                                <p class="text-center"><a id="showhide-account" href="#">Open new account</a></p>
+                                <p class="text-center">
+                                    <a id="showhide-account" href="#">Open new account</a>
+                                </p>
                                 <div class="mx-auto showhide-content" id="showhide-content" style="margin-bottom: 15px; display:none;">
 
                                     <form id="createaccount_form" name="form1" method="post">
-
-                                    <!--- SUCCESS AND UNSUCCESSFUL ALERTS --->
-                                    <div class="alert alert-success alert-dismissible" id="succ" style="display:none;">
-                                      <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
-                                    </div>
-                                    <div class="alert alert-danger alert-dismissible" id="err" style="display:none;">
-                                      <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
-                                    </div>
 
                                         <div class="form-group">
                                             <label style="font-family: Roboto, sans-serif;color: #212121;font-size: 15px;margin-bottom: 5px;">
@@ -222,7 +234,7 @@ if (!$r){
                                             <small class="form-text text-muted" style="margin-top: 0px;">Please select account type</small>
                                             <select class="form-control" name="accounttype" id="accounttype">
                                                 <option value="Visa Card" selected="">Visa Card</option>
-                                                <option value="Mastercard" selected="">Mastercard</option>
+                                                <option value="Mastercard">Mastercard</option>
                                                 <option value="Savings account">Savings account</option>
                                                 <option value="Checking account">Checking account</option>
                                                 <option value="Interest free">Interest free</option>
@@ -257,7 +269,7 @@ if (!$r){
                                         $tosrc=mysqli_fetch_array($y);
 
                                         // $rs = mysqli_query($conn, "SELECT * FROM transactions WHERE belongstoid = '$id' ORDER BY id DESC LIMIT 5");
-                                        $rs = mysqli_query($conn, "SELECT * FROM transactions WHERE belongstoid = '$id' OR recipientid='" . $i . "' ORDER BY id DESC LIMIT 10");
+                                        $rs = mysqli_query($conn, "SELECT * FROM transactions WHERE belongstoid = '$id' OR recipientid='" . $id . "' ORDER BY id DESC LIMIT 5");
 
                                         if (mysqli_num_rows($rs) == 0){
                                             echo "<center>There is nothing to find here..</center>";
@@ -298,20 +310,20 @@ if (!$r){
 
                                             if ($row['type'] == "send"){
                                                 if ($row['belongstoid'] == $i){
-                                                    echo "<p class='loghover fixpadding' style='margin-bottom: 5px;font-size: 14px;align-items: center;'>
-                                                Sent &nbsp;<label class='btnprice red disable-selection'>$" . number_format($row['amount'], 0) . "</label> " . " to <label class='btnprice dark disable-selection'>" . $recnm . "</label></p>";
+                                                    echo "<p class='loghover fixpadding' style='font-size: 14px;align-items: center;'>
+                                                You sent &nbsp;<label class='btnprice red disable-selection'>$" . short_number($row['amount']) . "</label> " . " to <label class='btnprice dark disable-selection'>" . $recnm . "</label></p>";
                                                 }
 
                                                 if ($row['recipientid'] == $i){
-                                                    echo "<p class='loghover fixpadding' style='margin-bottom: 5px;font-size: 14px;align-items: center;'>
-                                                Received &nbsp;<label class='btnprice green disable-selection'>$" . number_format($row['amount'], 0) . "</label> from <label class='btnprice dark disable-selection'>" . $nm . "</label></p>";
+                                                    echo "<p class='loghover fixpadding' style='font-size: 14px;align-items: center;'>
+                                                You received &nbsp;<label class='btnprice green disable-selection'>$" . short_number($row['amount']) . "</label> from <label class='btnprice dark disable-selection'>" . $nm . "</label></p>";
                                                 }
                                             }
 
                                             if ($row['type'] == "transfer"){
                                                 if ($row['belongstoid'] == $i){
-                                                    echo "<p class='loghover fixpadding' style='margin-bottom: 5px;font-size: 14px;align-items: center;'>
-                                                Transferred &nbsp;<label class='btnprice green disable-selection'>$" . number_format($row['amount'], 0) . "</label> from <label class='btnprice dark disable-selection'>" . $row['fromaccount'] . "</label> to <label class='btnprice dark disable-selection'>" . $row['toaccount'] . "</label></p>";
+                                                    echo "<p class='loghover fixpadding' style='font-size: 14px;align-items: center;'>
+                                                You transferred &nbsp;<label class='btnprice green disable-selection'>$" . short_number($row['amount']) . "</label> from <label class='btnprice dark disable-selection'>" . $row['fromaccount'] . "</label> to <label class='btnprice dark disable-selection'>" . $row['toaccount'] . "</label></p>";
                                                 }
                                             }
                                         }

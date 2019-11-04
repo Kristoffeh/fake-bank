@@ -1,3 +1,27 @@
+<?php
+ob_start();
+session_start();
+
+include '../scripts/logincheck.php';
+require '../require/dbconnect.php';
+require '../scripts/functions.php';
+
+$r=mysqli_query($conn, "SELECT * FROM users WHERE id='" . $_SESSION['id'] . "'");
+$userRow=mysqli_fetch_array($r);
+
+$id = $userRow['id'];
+
+
+
+/*
+DEBUG
+if (!$r){
+    printf("Error: %s\n", mysqli_error($conn));
+    exit();
+}*/
+
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -106,6 +130,9 @@
             </div>
             </nav>
             <div class="container-fluid">
+                <div class="d-sm-flex align-items-center mb-2">
+                    <h5><a href="home.php" class="text-left">&larr; Go back</a></h5>
+                </div>
                 <div class="d-sm-flex justify-content-between align-items-center mb-4">
                     <h3 class="text-dark mb-0">Your bank payments</h3>
                 </div>
@@ -118,28 +145,35 @@
                             </div>
                             <div class="card-body">
                                 <div class="paymententry">
+
+
                                     <div class="table-responsive table-borderless">
                                         <table class="table table-bordered table-hover table-sm">
                                             <thead>
                                                 <tr>
-                                                    <th>Date</th>
-                                                    <th class="text-left">Description</th>
-                                                    <th class="text-left">In</th>
-                                                    <th class="text-left">Out</th>
+                                                    <th class="text-left" style="width:20%;">Date</th>
+                                                    <th class="text-left" style="width:20%;">Description</th>
+                                                    <th class="text-left" style="width:20%;">In</th>
+                                                    <th class="text-left" style="width:20%;">Out</th>
+                                                    <th class="text-left" style="width:20%;">Recipient</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
+<!--                                                 <tr>
                                                     <td>19.05.2019</td>
                                                     <td>Freelance Payment</td>
-                                                    <td><label class="btnprice green disable-selection">+$500.00</label><label class="btnprice reserved givemargin disable-selection" style="font-size: 13px;">RESERVED<br></label><label class="btnprice yellow givemargin disable-selection">PENDING</label></td>
+                                                    <td>
+                                                        <label class="btnprice green disable-selection">+$500.00</label>
+                                                        <label class="btnprice reserved givemargin disable-selection" style="font-size: 13px;">RESERVED<br></label>
+                                                        <label class="btnprice yellow givemargin disable-selection">PENDING</label>
+                                                    </td>
                                                     <td></td>
                                                 </tr>
                                                 <tr>
                                                     <td>21.07.2018</td>
                                                     <td class="text-left">IRS Scammer</td>
                                                     <td class="text-left"></td>
-                                                    <td class="text-left"><label class="btnprice red disable-selection" style="font-size: 13px;">-$12,000.00</label><label class="btnprice reserved givemargin disable-selection" style="font-size: 13px;">RESERVED<br></label>
+                                                    <td class="text-left"><label class="btnprice red disable-selection" style="font-size: 13px;">$12,000.00</label><label class="btnprice reserved givemargin disable-selection" style="font-size: 13px;">RESERVED<br></label>
                                                         <label
                                                             class="btnprice yellow givemargin disable-selection">PENDING</label>
                                                     </td>
@@ -155,7 +189,56 @@
                                                     <td class="text-left">Amazon Prime</td>
                                                     <td class="text-left"></td>
                                                     <td class="text-left"><label class="btnprice red disable-selection">-$12.00</label></td>
-                                                </tr>
+                                                </tr> -->
+
+                                                <?php
+                                                $id = $userRow['id'];
+
+                                                $result = mysqli_query($conn, "SELECT * FROM transactions WHERE belongstoid = '$id' OR recipientid='" . $id . "' ORDER BY id DESC LIMIT 5");
+
+                                                // Format the account number to not show the entire account number. 7 numbers are hidden while the last 4 numbers are visible.
+                                                function format_accountnumber ($n){
+                                                    $y = "*******";
+                                                    $x = substr($n, -4);
+                                                    return $y . $x;
+                                                }
+
+                                                if (mysqli_num_rows($result) == 0){
+                                                    echo "<center>You don't have any registered accounts</center>";
+                                                }
+
+                                                while($row = mysqli_fetch_array($result)) {
+                                                    echo "<tr>";
+                                                    echo "<td class='text-left'><a>" . $row['date'] . "</a></td>";
+                                                    echo "<td class='text-left'><a>" . $row['message'] . "</a></td>";
+
+                                                    if ($row['belongstoid'] == $id){
+                                                        if ($row['type'] == "send"){
+                                                            echo "<td class='text-left'></td>";
+                                                            echo "<td class='text-left'><label class='btnprice red disable-selection'>$" . number_format($row['amount'], 2) . "</label></td>";
+                                                        }
+
+                                                        if ($row['type'] == "transfer"){
+                                                            echo "<td class='text-left'></td>";
+                                                            echo "<td class='text-left'><label class='btnprice red disable-selection'>$" . number_format($row['amount'], 2) . "</label></td>";
+                                                        }
+                                                    }
+
+                                                    if ($row['recipientid'] == $id){
+                                                        echo "<td class='text-left'><label class='btnprice green disable-selection'>$" . number_format($row['amount'], 2) . "</label></td>";
+                                                        echo "<td class='text-left'></td>";
+                                                    }
+
+                                                    if ($row['belongstoid'] == $id){
+                                                        echo "<td class='text-left'>" . $row['toaccount'] . "</td>";
+                                                    }
+
+                                                    echo "</tr>";
+                                                }
+
+
+                                                ?>
+
                                             </tbody>
                                         </table>
                                     </div>

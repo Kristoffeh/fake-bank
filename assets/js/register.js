@@ -1,4 +1,4 @@
-    $(document).ready(function() { 
+    $(document).ready(function() {  
     /*$('#login').on('click', function() {
         $("#login_form").show();
         $("#register_form").hide();
@@ -7,6 +7,8 @@
         $("#register_form").show();
         $("#login_form").hide();
     });*/
+
+    // Register user account to use bank
     $('#btnreg').on('click', function(){
         $("#btnreg").attr("disabled", "disabled");
         var name = $('#name').val();
@@ -49,10 +51,12 @@
             alert('Please fill all the fields!');
         }
     });
-    $('#btncreateacc').on('click', function() {
+
+    // Create financial account
+    $('#btncreateacc').on('click', function() { 
         $("#btncreateacc").attr("disabled", "disabled");
-        var accountname = $('#accountname').val();
-        var accounttype = $('#accounttype').val();
+        var accountname = $("#accountname").val();
+        var accounttype = $("#accounttype").val();
 
         if(accountname != "" && accounttype != ""){
             $.ajax({
@@ -65,18 +69,18 @@
                 },
                 cache: false,
                 success: function(dataResult){
-                    var dataResult = JSON.parse(dataResult);
-                    if(dataResult.statusCode==200){
-                        $('#createaccount_form').find('input:text').val('');
+                    console.log(dataResult);
+                    var ing = JSON.parse(dataResult);
 
-                        $("#err").hide();
+                    //console.log(JSON.stringify(dataResult));
+
+                    if(ing.statusCode == 200) {
                         $("#succ").show();
                         $('#succ').html('Account successfully created.');
                     }
-                    else if(dataResult.statusCode==201){
+                    else if(ing.statusCode == 201) {
                         $("#btncreateacc").removeAttr("disabled");
 
-                        $("#succ").hide();
                         $("#err").show();
                         $('#err').html('Something went wrong.');
                     }
@@ -87,6 +91,8 @@
             alert('Please fill all the fields!');
         }
     });
+
+    // Transfer money
     $('#btntransfer').on('click', function() {
         $("#btntransfer").attr("disabled", "disabled");
         var accountfrom = $('#transferfrom').val();
@@ -129,6 +135,8 @@
             alert('Please fill all the fields!');
         }
     });
+
+    // Send money
     $('#btnsendmoney').on('click', function() {
         $("#btnsendmoney").attr("disabled", "disabled");
         var accountfrom = $('#sendaccountfrom').val();
