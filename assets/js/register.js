@@ -69,7 +69,7 @@
                 },
                 cache: false,
                 success: function(dataResult){
-                    console.log(dataResult);
+                    // console.log(dataResult);
                     var ing = JSON.parse(dataResult);
 
                     //console.log(JSON.stringify(dataResult));
@@ -77,6 +77,12 @@
                     if(ing.statusCode == 200) {
                         $("#succ").show();
                         $('#succ').html('Account successfully created.');
+
+                        // Hide no accounts message
+                        $("#noaccount").hide();
+
+                        $("#showhide-content").slideToggle();
+                        $('#accTable tr:last').after("<td>" +accountname+ "<span style='color:#b7b9c9;'> (" +accounttype+ ")</label></td> <td>" + ing.accountnumber + "</td><td>$" + ing.accountbalance +"</td><td class='text-left'><a href='transfer.php?t=1'>Send Money</a></td><td class='text-left'><a href='transfer.php?t=2'>Transfer</a></td>");
                     }
                     else if(ing.statusCode == 201) {
                         $("#btncreateacc").removeAttr("disabled");

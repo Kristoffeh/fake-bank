@@ -128,7 +128,13 @@
 		}
 
 		if (mysqli_query($conn, $sql)) {
-			echo json_encode(array("statusCode"=>200));
+			echo json_encode(array(
+				"statusCode"=>200,
+				"accountnumber"=>$accountnumber,
+				"accountbalance"=>$balance,
+
+
+			));
 		} 
 		else {
 			echo json_encode(array("statusCode"=>201));
@@ -164,6 +170,7 @@
 			mysqli_query($conn, "UPDATE accounts SET accountbalance = '$finaltoacc' WHERE belongstoid='" . $_SESSION['id'] . "' AND accountname='$accountto'");
 		} 
 		else {
+			// echo json_encode(array("statusCode"=>201));
 			echo json_encode(array("statusCode"=>201));
 		}
 
