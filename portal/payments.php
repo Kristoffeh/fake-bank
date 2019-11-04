@@ -232,6 +232,9 @@ if (!$r){
                                                     if ($row['belongstoid'] == $id){
                                                         echo "<td class='text-left'>" . $row['toaccount'] . "</td>";
                                                     }
+                                                    else if ($row['recipientid'] == $id){
+                                                        echo "<td class='text-left'>" . $row['fromaccount'] . "</td>";
+                                                    }
 
                                                     echo "</tr>";
                                                 }

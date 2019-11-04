@@ -9,8 +9,6 @@ require '../scripts/functions.php';
 $r=mysqli_query($conn, "SELECT * FROM users WHERE id='" . $_SESSION['id'] . "'");
 $userRow=mysqli_fetch_array($r);
 
-
-
 /*
 DEBUG
 if (!$r){
@@ -191,9 +189,6 @@ if (!$r){
 
                                         while($row = mysqli_fetch_array($resultt)) {
                                             echo "<tr>";
-
-
-
                                             echo "<td>" . $row['accountname'] . " <span style='color: #b7b9c9;'>(" . $row['accounttype'] . ")</label>" . "</td>";
                                             /*echo "<td class='text-center'><a>" . format_accountnumber($row['accountnumber']) . "<br></a></td>";*/
                                             echo "<td class='text-left'><a>" . $row['accountnumber'] . "</a></td>";
@@ -203,15 +198,17 @@ if (!$r){
                                             echo "</tr>";
                                         }
 
-                                        if (mysqli_num_rows($resultt) == 0){
-                                            echo "<center>You don't have any registered accounts</center>";
-                                        }
+                                        echo "</tbody>";
+                                        echo "</table>";
 
+                                        if (mysqli_num_rows($resultt) == 0){
+                                            echo "<center style='margin-bottom:25px;' id='noaccount'>You don't have any registered accounts</center>";
+                                        }
 
                                         ?>
 
-                                        </tbody>
-                                    </table>
+                                        
+                                    
                                 </div>
                                 <p class="text-center">
                                     <a id="showhide-account" href="#">Open new account</a>
