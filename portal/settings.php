@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 require '../require/dbconnect.php';
 include '../scripts/logincheck.php';
@@ -179,7 +180,7 @@ $userRow=mysqli_fetch_array($r);
                                         <p class="text-primary m-0 font-weight-bold">User Settings</p>
                                     </div>
                                     <div class="card-body">
-                                        <form>
+                                        <form id="usersettings_form" name="form1" method="post">
                                             <div class="form-row">
                                                 <div class="col-xl-6">
                                                     <div class="form-group">
@@ -232,7 +233,7 @@ $userRow=mysqli_fetch_array($r);
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <button class="btn btn-primary btn-sm brendybtn-lightgreen" type="submit">Save Settings</button>
+                                                <button class="btn btn-primary btn-sm brendybtn-lightgreen" type="submit" name="btnusersave" id="btnusersave">Save Settings</button>
                                             </div>
                                         </form>
                                     </div>
